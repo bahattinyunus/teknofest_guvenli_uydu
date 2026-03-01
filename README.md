@@ -2,48 +2,45 @@
 
 ![Teknofest Güvenli Uydu Banner](https://raw.githubusercontent.com/bahattinyunus/teknofest_guvenli_uydu/main/banner.png)
 
-</div>
-
-<div align="center">
-
 # 🛰️ TEKNOFEST GÜVENLİ UYDU SİSTEMLERİ 🛡️
 
 ### **[ PROJECT: SECURE_ORBIT_V1 ]**
-**Classification:** `TOP SECRET // NOFORN`  
-**Security Level:** `LEVEL 5 - QUANTUM ENCRYPTED`  
+
+**Classification:** `TOP SECRET // NOFORN`
+**Security Level:** `LEVEL 5 - QUANTUM ENCRYPTED`
 **Mission Status:** `ACTIVE OPERATIONAL`
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Security: AES-256](https://img.shields.io/badge/Security-AES--256-red)](https://github.com/bahattinyunus)
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)](https://github.com/bahattinyunus)
 [![Version](https://img.shields.io/badge/Version-1.0.0--Alpha-blueviolet)](https://github.com/bahattinyunus)
+[![Teknofest](https://img.shields.io/badge/Teknofest-2025-orange)](https://www.teknofest.org)
+[![Platform](https://img.shields.io/badge/Platform-STM32%20%7C%20LoRa-blue)](https://github.com/bahattinyunus)
 
 </div>
 
 ---
 
-## 👨‍✈️ MISSION COMMANDER [AUTHOR_PROFILE]
+## 👨‍✈️ MISSION COMMANDER
 
 <div align="center">
 <table>
 <tr>
 <td align="center">
-<img src="https://avatars.githubusercontent.com/u/1019890?v=4" width="150px;" style="border-radius: 50%; border: 3px solid #00ff00; box-shadow: 0 0 20px #00ff00;" alt="Commander Avatar"/>
-<br />
-<h3><b>Bahattin Yunus Çetin</b></h3>
-<h4>IT Architect // System Commander</h4>
+<img src="https://avatars.githubusercontent.com/u/1019890?v=4" width="120px;" style="border-radius:50%;border:3px solid #00ff00;" alt="Commander Avatar"/>
+<br/>
+<b>Bahattin Yunus Çetin</b><br/>
+<sub>IT Architect // System Commander</sub>
 </td>
 <td align="left">
 
 | **METRIC** | **DATA** |
 | :--- | :--- |
 | **Callsign** | `BYC_ARCHITECT` |
-| **Base of Operations** | `TRABZON / OF` (Sector: Black Sea) |
-| **Education** | Student @ Trabzon Of |
-| **Specialization** | System Architecture, Cyber Security, Satellite Ops |
+| **Konum** | Trabzon / Karadeniz Sektörü |
+| **Uzmanlık** | Sistem Mimarisi, Siber Güvenlik, Uydu Sistemleri |
 | **Clearance** | `LEVEL 5 / ROOT ACCESS` |
 
-**CONNECT UPLINK:**
 <a href="https://github.com/bahattinyunus"><img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"></a>
 <a href="https://www.linkedin.com/in/bahattinyunus/"><img src="https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"></a>
 
@@ -54,40 +51,47 @@
 
 ---
 
-## 🌍 MISSION OVERVIEW [GÖREV TANIMI]
+## 🌍 GÖREV TANIMI — MISSION OVERVIEW
 
-**Teknofest Güvenli Uydu (Secure Satellite)** projesi, alçak dünya yörüngesinde (LEO) görev yapacak, yüksek güvenlikli, otonom veri işleme yeteneğine sahip ve siber saldırılara karşı dayanıklı bir model uydu sisteminin tasarımı ve simülasyonudur. 
+**Teknofest Güvenli Uydu** projesi, alçak dünya yörüngesinde (LEO) görev yapacak, yüksek güvenlikli, otonom veri işleme yeteneğine sahip ve siber saldırılara karşı dayanıklı bir model uydu sisteminin tasarımı ve simülasyonudur.
 
-Bu repo, uydunun **"Beyin" (Core System)** mimarisini, yer istasyonu ile olan **Kriptolu Haberleşme** protokollerini ve otonom görev icra algoritmalarını barındıran merkezi komuta veri tabanıdır. Hedefimiz, karıştırılamaz ve ele geçirilemez bir veri hattı kurmaktır.
+Bu repo, uydunun **"Beyin" (Core System)** mimarisini, yer istasyonu ile olan **Kriptolu Haberleşme** protokollerini ve otonom görev icra algoritmalarını barındıran merkezi komuta veri tabanıdır.
 
-### 🎯 Strategic Objectives (Stratejik Hedefler)
-1.  **Tam Otonomi:** Uydunun yer istasyonundan bağımsız karar verebilmesi.
-2.  **Siber Kalkan:** Kuantum sonrası (Post-Quantum) şifreleme algoritmalarına hazırlık.
-3.  **Veri Bütünlüğü:** Telemetri verilerinin hatasız ve gecikmesiz transferi.
+> **Hedef:** Karıştırılamaz, ele geçirilemez ve kendi kendine karar verebilen bir uzay platformu inşa etmek.
+
+### 🎯 Stratejik Hedefler
+
+| # | Hedef | Açıklama |
+| :---: | :--- | :--- |
+| 1 | **Tam Otonomi** | Uydunun yer istasyonundan bağımsız karar verebilmesi |
+| 2 | **Siber Kalkan** | Post-Quantum şifreleme algoritmalarına hazırlık |
+| 3 | **Veri Bütünlüğü** | Telemetri verilerinin hatasız ve gecikmesiz transferi |
+| 4 | **Anti-Jamming** | FHSS tabanlı frekans atlama ile sinyal koruması |
+| 5 | **Gizlilik** | AES-256 ile uçtan uca güvenli iletişim |
 
 ---
 
-## 🏗️ SYSTEM ARCHITECTURE [SİSTEM MİMARİSİ]
+## 🏗️ SİSTEM MİMARİSİ — SYSTEM ARCHITECTURE
 
-Sistem, üç ana katmandan oluşan hiyerarşik bir mimariye sahiptir. Aşağıdaki şema, veri akışını ve güvenlik katmanlarını özetler.
+Sistem, üç ana katmandan oluşan hiyerarşik bir mimariye sahiptir.
 
 ```mermaid
 graph TD
-    subgraph SPACE_SEGMENT [🛰️ UYDU SEGMENTİ]
-        A[Ana İşlemci (OBC)] -->|I2C/SPI| B(Sensör Füzyonu)
-        A -->|UART| C{RF Modülü (LoRa)}
+    subgraph SPACE_SEGMENT[🛰️ UYDU SEGMENTİ]
+        A[Ana İşlemci OBC] -->|I2C/SPI| B(Sensör Füzyonu)
+        A -->|UART| C{RF Modülü LoRa}
         B -->|Data| D[Payload Kamera]
         D -->|Image Processing| A
         style A fill:#2d2d2d,stroke:#00ff00,stroke-width:2px,color:#fff
         style C fill:#000,stroke:#f00,stroke-width:2px,color:#fff
     end
 
-    subgraph SECURE_LINK [🔒 ŞİFRELİ HAT (AES-256)]
+    subgraph SECURE_LINK[🔒 ŞİFRELİ HAT AES-256]
         C <===>|Encrypted Packet| E{Yer İstasyonu RF}
         style SECURE_LINK fill:#111,stroke:#00ffff,stroke-dasharray: 5 5,color:#00ffff
     end
 
-    subgraph GROUND_SEGMENT [💻 YER KONTROL]
+    subgraph GROUND_SEGMENT[💻 YER KONTROL]
         E -->|Serial| F[Komuta Kontrol Yazılımı]
         F -->|Log| G[(Veritabanı)]
         F -->|Display| H[Dashboard UI]
@@ -95,60 +99,103 @@ graph TD
     end
 ```
 
-### 🧠 Core Modules (Çekirdek Modüller)
+### 🧠 Çekirdek Modüller
 
-*   **`OBC_Main.py`**: Uydunun merkezi sinir sistemi. Görev zamanlamasını ve güç yönetimini yapar.
-*   **`Crypto_Engine.cpp`**: Veri paketlerini AES-256 standardında şifreleyen ve çözen motor.
-*   **`Telemetry_Parser.py`**: Sensörlerden gelen veriyi anlamlı paketlere dönüştüren ayrıştırıcı.
-*   **`Ground_Control_UI`**: Operatörün uyduyu izlediği "Elite" arayüz.
-
----
-
-## 🛡️ SECURITY PROTOCOLS [GÜVENLİK PROTOKOLLERİ]
-
-Bu proje, standart bir model uydudan fazlasıdır; bir siber güvenlik kalesidir.
-
-| Protokol Adı | Açıklama | Güvenlik Seviyesi |
+| Modül | Dil | Açıklama |
 | :--- | :--- | :--- |
-| **Handshake-X** | Yer ve uydu arasında dinamik anahtar değişimi | ⭐⭐⭐⭐⭐ |
-| **Black-Box Log** | Uçuş verilerinin kriptolu kara kutuya yazılması | ⭐⭐⭐⭐ |
-| **Anti-Jamming** | Frekans atlamalı yayılı spektrum (FHSS) | ⭐⭐⭐⭐⭐ |
-| **Self-Destruct** | Yetkisiz erişim saptandığında veriyi silme (Kill Switch) | ☢️ CRITICAL |
+| **`OBC_Main.py`** | Python | Merkezi otonom karar motoru, görev zamanlama ve güç yönetimi |
+| **`Crypto_Engine.cpp`** | C++ | AES-256 şifreleme/çözme motoru, HMAC doğrulama |
+| **`Telemetry_Parser.py`** | Python | Sensör verisi ayrıştırıcı, paket doğrulama katmanı |
+| **`Ground_Control_UI`** | Python/Tkinter | Operatör kontrol arayüzü, gerçek zamanlı izleme |
+| **`mission_control.py`** | Python | Ana simülasyon orkestratörü |
 
 ---
 
-## 🚀 INSTALLATION & DEPLOYMENT [KURULUM]
+## 🛡️ GÜVENLİK PROTOKOLLERİ — SECURITY PROTOCOLS
 
-Sistemi yerel "AR-GE Üssünüzde" (Localhost) çalıştırmak için aşağıdaki talimatları izleyin.
+Bu proje, standart bir model uydudan fazlasıdır; bir **siber güvenlik kalesidir**.
 
-### Prerequisites (Gereksinimler)
-*   Python 3.9+ (The Serpent)
-*   STM32 Toolchain (Microcontroller Logic)
-*   LoRa HAT (Hardware Interface)
+| Protokol | Açıklama | Güvenlik Seviyesi |
+| :--- | :--- | :---: |
+| **AES-256 Handshake** | Dinamik anahtar değişimi — her oturum için taze anahtar | ⭐⭐⭐⭐⭐ |
+| **FHSS Anti-Jamming** | Frekans atlamalı yayılı spektrum ile sinyal koruması | ⭐⭐⭐⭐⭐ |
+| **Black-Box Log** | Uçuş verilerinin kriptolu kara kutuya yazılması | ⭐⭐⭐⭐ |
+| **HMAC Doğrulama** | Paket bütünlüğü ve kimlik doğrulama katmanı | ⭐⭐⭐⭐ |
+| **Kill Switch** | Yetkisiz erişimde otomatik veri silme (Self-Destruct) | ☢️ KRİTİK |
+| **Replay Attack Guard** | Tekrar oynatma saldırılarına karşı zaman damgası koruması | ⭐⭐⭐ |
 
-### Initialization (Başlatma)
+---
+
+## 📊 RAKİP ANALİZİ — COMPETITIVE ANALYSIS
+
+Projemiz, dünyanın en prestijli model uydu yarışmaları ile teknik ve uygulama perspektifinden karşılaştırılmıştır.
+
+| Yarışma | Organizatör | Temel Görevi | Boyut/Ağırlık | Güvenlik | Kaynaklar |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **NASA/AIAA CanSat** | NASA, AIAA | Paraglider Enstrüman Teslimatı | 300–350g | ❌ | [🔗 Site](https://www.cansatcompetition.com/) |
+| **ESA CanSat** | ESA (Avrupa) | Sıcaklık/Basınç Ölçümü + İkincil Görev | 66×115mm, ≤350g | ❌ | [🔗 Site](https://www.esa.int/Education/CanSat) |
+| **ARLISS** | UNISEC / Stanford | Otonom Geri Dönüş (Rover/Paraglider) | 350g–1050g | ❌ | [🔗 Site](http://www.arliss.org/) |
+| **UNISEC Global** | UNISEC | Uzay Mühendisliği Görevleri | Değişken | ❌ | [🔗 Site](https://www.unisec-global.org/) |
+| **🇹🇷 Teknofest Güvenli Uydu** | T3 Vakfı / Türksat | **Güvenli Telemetri + Veri Şifreleme** | Şartnameye Uygun | ✅ **AES-256** | [🔗 Repo](https://github.com/bahattinyunus/teknofest_guvenli_uydu) |
+
+### 🔑 Kritik Farklılıklar ve Rekabet Avantajı
+
+| Özellik | Uluslararası Rakipler | Teknofest Güvenli Uydu |
+| :--- | :---: | :---: |
+| Uçtan Uca Şifreleme | ❌ | ✅ AES-256 |
+| Anti-Jamming Koruması | ❌ | ✅ FHSS |
+| Replay Attack Savunması | ❌ | ✅ Zaman Damgası |
+| Otonom Karar Verme | Kısmen | ✅ Tam OBC Otonomisi |
+| Kill Switch (Veri Silme) | ❌ | ✅ |
+| Yerli Mühendislik | ❌ | ✅ Türk Tasarımı |
+
+> **Sonuç:** Teknofest Güvenli Uydu, siber güvenlik katmanıyla bu kategoride **küresel bir ilk olmaya aday** projedir.
+
+### 📎 Açık Kaynak Referanslar
+
+| Proje | Platform | Açıklama |
+| :--- | :--- | :--- |
+| [maanuluque/CansatSoftware2022](https://github.com/maanuluque/CansatSoftware2022) | Python/Arduino | CanSat 2022 FSW + GCS tam örnek |
+| [CanSatNeXT Library](https://github.com/netnspace/CanSatNeXT_library) | Arduino/ESP32 | ESP32 tabanlı donanım kütüphanesi |
+| [AmirhoseinMasoumi/CanSat-GCS](https://github.com/AmirhoseinMasoumi/CanSat-Ground-Station) | C++/QML | Çapraz platform yer istasyonu GUI |
+| [AAS/AIAA 2025-2026 Kılavuzu](https://www.cansatcompetition.com/) | PDF | Resmi teknik şartname |
+| [ESA CanSat Teknik Dokümanlar](https://www.esa.int/Education/CanSat) | PDF | ESA öğrenci kaynakları |
+
+---
+
+## 🔧 KURULUM & ÇALIŞTIRMA
+
+### Ön Gereksinimler
+
+- Python 3.9+
+- STM32 Toolchain
+- LoRa HAT (Hardware Interface)
+
+### Başlatma
 
 ```bash
-# 1. Repoyu Klonla (Secure Clone)
+# 1. Repoyu Klonla
 git clone https://github.com/bahattinyunus/teknofest_guvenli_uydu.git
-
-# 2. Güvenlik Protokollerini Aktif Et
 cd teknofest_guvenli_uydu
+
+# 2. Bağımlılıkları Yükle
 pip install -r requirements_secure.txt
 
 # 3. Simülasyonu Başlat
 python3 mission_control.py --mode=simulation --security=high
 ```
 
-> **[SYSTEM ALERT]:** Simülasyon başladığında terminalinizde akan şifreli veriler göreceksiniz. Bu normaldir.
+> **[SYSTEM ALERT]:** Simülasyon başladığında terminalde şifreli veri akışı göreceksiniz. Bu normaldir.
 
 ---
 
-## 🔮 FUTURE VISION [GELECEK VİZYONU]
+## 🔮 GELECEK VİZYONU — ROADMAP 2026
 
-*   [ ] **Swarm Intelligence:** Birden fazla uydunun takım halinde çalışması.
-*   [ ] **AI-Powered Defense:** Saldırıları tespit eden yapay zeka nöbetçileri.
-*   [ ] **Laser Link:** RF yerine optik lazer haberleşme.
+- [ ] **Swarm Intelligence:** Birden fazla uydunun koordineli takım görevleri
+- [ ] **Post-Quantum Crypto:** Kyber-1024 / Dilithium algoritmalarına geçiş
+- [ ] **AI-Powered Defense:** Anomali tespiti için YZ nöbetçi katmanı
+- [ ] **Laser Link:** RF yerine optik lazer haberleşme (FSO teknolojisi)
+- [ ] **Real Hardware Demo:** STM32 + LoRa fiziksel prototip uçuş testi
 
 ---
 
@@ -156,36 +203,7 @@ python3 mission_control.py --mode=simulation --security=high
 
 **"GÖKLERDE İSTİKBAL, KODLARDA GÜVENLİK"**
 
-Designed & Engineered by **Bahattin Yunus Çetin**  
+Designed & Engineered by **Bahattin Yunus Çetin**
 *Trabzon / Protocol 61*
 
 </div>
-
----
-
----
-
----
-
----
-
----
-
----
----
-
-### 📊 Rakip Analizi (Competitive Analysis)
-
-Projemiz, dünyadaki benzer model uydu yarışmaları ile teknik ve uygulama perspektifinden karşılaştırılmıştır.
-
-| Yarışma | Organizatör | Temel Görevi | Ağırlık/Boyut | Kaynaklar |
-| :--- | :--- | :--- | :--- | :--- |
-| **NASA/AIAA CanSat** | NASA, AIAA | Paraglider Enstrüman Teslimatı | 300-350g | [Detaylar](https://www.cansatcompetition.com/) |
-| **ESA CanSat** | ESA | Sıcaklık/Basınç Ölçümü & İkincil Görev | Soda Kutusu (66x115mm) | [Detaylar](https://www.esa.int/Education/CanSat) |
-| **ARLISS** | UNISEC, Stanford | Otonom Geri Dönüş (Rover/Paraglider) | 350g - 1050g | [Detaylar](http://www.arliss.org/) |
-| **Teknofest Güvenli Uydu** | T3 Vakfı, Türksat | Güvenli Telemetri & Veri Şifreleme | Şartnameye Uygun | [Proje Kaynağı](#) |
-
-#### 🔑 Temel Farklar ve Avantajlar
-- **Gelişmiş Güvenlik:** Diğer yarışmalar sadece veri iletimine odaklanırken, projemiz AES-256 tabanlı telemetri şifreleme ve anti-jamming protokollerini içerir.
-- **Yüksek Çözünürlüklü Analiz:** Veri örnekleme hızımız global standartların %20 üzerindedir.
-
