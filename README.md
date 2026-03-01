@@ -12,10 +12,10 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Security: AES-256](https://img.shields.io/badge/Security-AES--256-red)](https://github.com/bahattinyunus)
-[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)](https://github.com/bahattinyunus)
-[![Version](https://img.shields.io/badge/Version-1.1.0-blueviolet)](https://github.com/bahattinyunus)
+[![Version](https://img.shields.io/badge/Version-1.2.0--Ultra--Pro-brightgreen)](https://github.com/bahattinyunus)
 [![Teknofest](https://img.shields.io/badge/Teknofest-2025-orange)](https://www.teknofest.org)
 [![Platform](https://img.shields.io/badge/Platform-STM32%20%7C%20LoRa-blue)](https://github.com/bahattinyunus)
+[![Handshake](https://img.shields.io/badge/Auth-Handshake--X-cyan)](https://github.com/bahattinyunus)
 
 </div>
 
@@ -51,129 +51,87 @@
 
 ---
 
-## 🌍 GÖREV TANIMI — MISSION OVERVIEW
+## 📁 PROJECT STRUCTURE — PROJE YAPISI
 
-**Teknofest Güvenli Uydu** projesi, alçak dünya yörüngesinde (LEO) görev yapacak, yüksek güvenlikli, otonom veri işleme yeteneğine sahip ve siber saldırılara karşı dayanıklı bir model uydu sisteminin tasarımı ve simülasyonudur.
-
-> **Vizyon:** Karıştırılamaz, ele geçirilemez ve kendi kendine karar verebilen bir uzay platformu inşa ederek yerli ve milli savunma teknolojilerine model uydu perspektifinden katkı sağlamak.
-
-### 🎯 Stratejik Hedefler
-
-| # | Hedef | Teknik Yaklaşım |
-| :---: | :--- | :--- |
-| 1 | **Tam Otonomi** | OBC tabanlı State-Machine yönetimi |
-| 2 | **Siber Kalkan** | Post-Quantum hazırlıklı AES-256 + HMAC-SHA256 |
-| 3 | **Veri Bütünlüğü** | Reed-Solomon hata düzeltme kodları (FEC) |
-| 4 | **Sinyal Kararlılığı** | FHSS (Frequency Hopping Spread Spectrum) |
-
----
-
-## 🛠️ HARDWARE ARCHITECTURE — DONANIM LİSTESİ (BOM)
-
-Sistem, fiziksel katmanda aşağıdaki komponentler üzerine kurgulanmıştır:
-
-| Komponent | Model | Görev |
-| :--- | :--- | :--- |
-| **Ana İşlemci** | STM32F4 / Raspberry Pi Pico | Veri işleme ve görev orkestrasyonu |
-| **Haberleşme** | LoRa SX1278 (433/868 MHz) | Uzun menzilli, düşük güç tüketimli güvenli veri hattı |
-| **GNSS Sensörü** | u-blox NEO-6M / M8N | Gerçek zamanlı konum ve zaman senkronizasyonu |
-| **IMU Sensörü** | MPU-6050 / BNO055 | 9-Eksenli yönelim ve ivme analizi |
-| **Barometre** | BMP280 / MS5611 | İrtifa ve basınç verisi örnekleme |
-| **Güç Yönetimi** | Li-Po 2S / 3S + PMIC | Güç dağıtımı ve voltaj regülasyonu |
+```text
+teknofest_guvenli_uydu/
+├── src/                        # Flight Software (FSW) Katmanı
+│   ├── OBC_Main.py             # Ana Otonom Sinir Sistemi
+│   ├── Crypto_Engine.cpp       # AES-256 & HMAC Çekirdeği
+│   └── Telemetry_Parser.py     # Veri Paketleyici/Ayrıştırıcı
+├── ground_station/             # Yer İstasyonu Kontrol Arayüzü
+├── tests/                      # Birim ve Entegrasyon Testleri
+├── mission_control.py          # Sistem Orkestratörü & Simülasyon
+├── banner.png                  # Proje Görsel Kimliği
+└── requirements_secure.txt     # Bağımlılık Yazılım Katmanı
+```
 
 ---
 
-## 📈 FLIGHT PHASES — UÇUŞ SAFHALARI
+## 🔐 SECURE HANDSHAKE — GÜVENLİ EL SIKIŞMA (Handshake-X)
 
-Uydunun görev döngüsü 5 ana safhadan oluşur:
-
-1.  **PRE-LAUNCH (Bekleme):** Sistem kontrolleri, sensör kalibrasyonu ve yer istasyonu el sıkışması.
-2.  **ASCENT (Yükselme):** İvme ve irtifa takibi, telemetri yayını, otonom stabilizasyon.
-3.  **SEPARATION (Ayrılma):** Roket/Taşıyıcıdan ayrılma, faydalı yükün aktif edilmesi.
-4.  **DESCENT (İniş):** Parçalı iniş, sensör verisi kaydı, GPS tabanlı konum takibi.
-5.  **RECOVERY (Kurtarma):** Bipleyici/Fener aktivasyonu, son konum koordinat paylaşımı.
-
----
-
-## 🏗️ SİSTEM MİMARİSİ — ARCHITECTURE
+Uydu ve Yer İstasyonu arasındaki ilk temas, aşağıdaki **Handshake-X** protokolü ile gerçekleşir. Bu süreç, yetkisiz erişimi fiziksel katmanda engeller.
 
 ```mermaid
-graph TD
-    subgraph SPACE_SEGMENT[🛰️ UYDU KATMANI]
-        A[OBC Core] -->|AES Encrypt| B{LoRa TX}
-        C[Sensor Hub] -->|Raw Data| A
-        D[Power MGMT] -->|Status| A
-    end
-
-    subgraph TELEMETRY_STREAM[🔒 SECURE STREAM]
-        B -.->|Encrypted RF| E{LoRa RX}
-    end
-
-    subgraph GROUND_SEGMENT[💻 YER KONTROL]
-        E -->|Serial| F[Decryptor Engine]
-        F -->|JSON| G[Real-time Dashboard]
-        G -->|Log| H[(SQLite DB)]
-    end
-```
-
-### 🧠 Matematiksel Temeller
-
-- **Konum Tahmini:** İvme ve GPS verileri **Kalman Filtresi** (Extended Kalman Filter) ile birleştirilerek gürültüden arındırılmaktadır.
-- **Şifreleme:** Veri blokları **AES-256 (CTR Mode)** ile şifrelenir. Her paket için benzersiz bir `Nonce` ve `Counter` değeri kullanılarak *Replay Attack* önlenir.
-
----
-
-## 📊 RAKİP ANALİZİ — COMPETITIVE ANALYSIS
-
-Projemiz, dünyanın en prestijli model uydu yarışmaları ile karşılaştırılmıştır.
-
-| Yarışma | Güvenlik Katmanı | Otonom Karar | İletişim Protokolü |
-| :--- | :---: | :---: | :--- |
-| **NASA CanSat** | ❌ (Plaintext) | ✅ Kısmi | XBee / RF |
-| **ESA CanSat** | ❌ (Plaintext) | ❌ (Kısıtlı) | RF / NRF |
-| **ARLISS** | ❌ (Plaintext) | ✅ Tam | Satellite / RF |
-| **🇹🇷 Güvenli Uydu** | ✅ **AES-256 + FHSS** | ✅ **Tam Otonom** | **LoRa (Kriptolu)** |
-
----
-
-## 📡 TELEMETRY STRUCTURE — VERİ YAPISI
-
-Yer istasyonuna gönderilen tipik bir telemetri paketi yapısı (şifreleme öncesi):
-
-```json
-{
-  "packet_id": 1024,
-  "timestamp": "2025-05-24T14:30:05.123Z",
-  "status": "OPERATIONAL",
-  "sensors": {
-    "altitude": 750.45,
-    "temp": 22.4,
-    "pressure": 1013.25,
-    "gps": [41.0082, 39.7235],
-    "batt_v": 7.4
-  },
-  "security": {
-    "key_id": "K-ALPHA-02",
-    "hmac": "ae45f8..."
-  }
-}
+sequenceDiagram
+    participant GS as 💻 Yer İstasyonu
+    participant SAT as 🛰️ Uydu (OBC Core)
+    Note over GS,SAT: Frekans Atlama Senkronizasyonu (FHSS)
+    GS->>SAT: SYNC_REQ (Plaintext Hello)
+    SAT->>GS: CHALLENGE (Dinamik Random Nonce)
+    Note right of GS: Nonce + Private Key ile SIGN üretimi
+    GS->>SAT: AUTH_RESPONSE (AES-256 Encrypted + HMAC)
+    SAT->>SAT: Kimlik Doğrulama (HMAC Verify)
+    SAT->>GS: ACCESS_GRANTED (Session Key Established)
+    Note over GS,SAT: Güvenli Telemetri Akışı Başladı
 ```
 
 ---
 
-## 🔧 KURULUM & ÇALIŞTIRMA
+## 🛠️ HARDWARE TOPOLOGY — DONANIM TOPOLOJİSİ
+
+Uydudaki komponentlerin birbirleriyle olan merkezi veri bağlantıları:
+
+| Birim A | Birim B | Protokol | Hız / Parametre |
+| :--- | :--- | :---: | :--- |
+| **STM32 (OBC)** | **LoRa SX1278** | SPI | 10 MHz, Full-Duplex |
+| **STM32 (OBC)** | **GPS NEO-M8N** | UART | 9600-115200 Baud |
+| **STM32 (OBC)** | **MPU-6050** | I2C | 400 kHz (Fast Mode) |
+| **STM32 (OBC)** | **SD Card** | SPI | Telemetri Kara Kutusu |
+| **OBC** | **Payload Cam** | UART/CSI | Görüntü İşleme Verisi |
+
+---
+
+## � LIVE UPLINK SIMULATION — TELEMETRİ AKIŞI
+
+Aşağıdaki blok, uydudan yer istasyonuna akan şifreli ve ayrıştırılmış telemetri verisinin bir simülasyonudur:
 
 ```bash
-# 1. Repoyu Klonla
-git clone https://github.com/bahattinyunus/teknofest_guvenli_uydu.git
-cd teknofest_guvenli_uydu
-
-# 2. Bağımlılıkları Yükle
-pip install -r requirements_secure.txt
-
-# 3. Simülasyonu Başlat
-python3 mission_control.py --mode=simulation --security=high
+[UPLINK] 🛰️ SESSION: ACTIVE-SECURE-V1
+[09:41:02] >> RX_ENC: 0x8F3C...A4B2 | HMAC: VALID
+[09:41:03] >> DECRYPTED: {alt: 752.4m, vel: 12.5m/s, bat: 7.8V, tilt: 2.1°}
+[09:41:04] >> STATUS: NOMINAL | FREQ: HOPPING_ACTIVE
+[09:41:05] >> POSITION: 41.0082° N, 39.7235° E | FIX: 3D_SATELLITE
 ```
+
+---
+
+## 📊 COMPARATIVE ANALYSIS — RAKİP ANALİZİ
+
+| Yarışma | Güvenlik Seviyesi | Otonom Karar | İletişim | Avantajımız |
+| :--- | :---: | :---: | :--- | :--- |
+| **NASA CanSat** | Dünyaya Açık | ✅ Kısmi | XBee | 🔒 AES-256 |
+| **ESA CanSat** | Şifresiz | ❌ Kısıtlı | RF 433 | 📡 FHSS Jam-Proof |
+| **ARLISS** | Şifresiz | ✅ Tam | Satellite | 🛡️ Kill-Switch |
+| **🇹🇷 Güvenli Uydu** | **QUANTUM PREP** | **FULL OBC** | **LoRa SEC** | **Yerli Siber Kalkan** |
+
+---
+
+## � ROADMAP — YOL HARİTASI 2026
+
+- [ ] **v1.3.0:** Swarm Intelligence — Çoklu uydu koordinasyonu.
+- [ ] **v1.4.0:** Post-Quantum Crypto — Kyber/Dilithium entegrasyonu.
+- [ ] **v1.5.0:** AI-Sentinel — Anomali tespiti yapan yapay zeka katmanı.
 
 ---
 
