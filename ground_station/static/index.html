@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGS-1 | Secure Ground Station</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+    <div class="overlay"></div>
+    <header>
+        <div class="logo-section">
+            <span class="pulse"></span>
+            <h1>SECURE_ORBIT_V1 // GROUND_STATION</h1>
+        </div>
+        <div class="status-bar">
+            <div class="status-item"><span class="label">LINK:</span> <span id="link-status" class="value ok">STABLE</span></div>
+            <div class="status-item"><span class="label">SEC:</span> <span class="value">AES-256-GCM</span></div>
+            <div class="status-item"><span id="clock" class="value">00:00:00</span></div>
+        </div>
+    </header>
+
+    <main>
+        <section class="telemetry-grid">
+            <!-- Attitude / 3D Visual -->
+            <div class="card visual-card">
+                <h3>ATTITUDE_VISUALIZER</h3>
+                <div class="satellite-container">
+                    <div id="satellite-model" class="satellite">
+                        <div class="body"></div>
+                        <div class="panel left"></div>
+                        <div class="panel right"></div>
+                    </div>
+                </div>
+                <div class="angle-readouts">
+                    <div class="angle">PITCH: <span id="val-pitch">0.0</span>°</div>
+                    <div class="angle">ROLL: <span id="val-roll">0.0</span>°</div>
+                    <div class="angle">YAW: <span id="val-yaw">0.0</span>°</div>
+                </div>
+            </div>
+
+            <!-- Core Data -->
+            <div class="card data-card">
+                <h3>MISSION_TELEMETRY</h3>
+                <div class="data-grid">
+                    <div class="data-item">
+                        <span class="label">ALTITUDE</span>
+                        <span id="val-alt" class="value">0.0</span>
+                        <span class="unit">m</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="label">BATTERY</span>
+                        <div class="progress-bar"><div id="battery-fill" style="width: 100%;"></div></div>
+                        <span id="val-bat" class="value">100</span>
+                        <span class="unit">%</span>
+                    </div>
+                    <div class="data-item full">
+                        <span class="label">GPS_COORDS</span>
+                        <span id="val-gps" class="value">0.0000, 0.0000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Encryption Details -->
+            <div class="card security-card">
+                <h3>SECURITY_INTEGRITY</h3>
+                <div class="packet-info">
+                    <div class="label">LATEST_PAYLOAD (HEX)</div>
+                    <div id="val-payload" class="hex-box">Waiting...</div>
+                    <div class="label">HMAC_SIGNATURE</div>
+                    <div id="val-sig" class="hex-box small">Waiting...</div>
+                </div>
+                <div id="integrity-badge" class="badge">VERIFIED</div>
+            </div>
+
+            <!-- Terminal / Commands -->
+            <div class="card terminal-card">
+                <h3>UP_LINK_TERMINAL</h3>
+                <div id="terminal-out" class="terminal-display">
+                    <div class="line">[SYSTEM] Terminal initialized. Waiting for uplink...</div>
+                </div>
+                <div class="terminal-input">
+                    <span>></span>
+                    <input type="text" id="cmd-input" placeholder="Enter secure command...">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Simulation Logic for UI
+        async function updateData() {
+            try {
+                const response = await fetch('/api/telemetry');
+                const data = await response.json();
+                
+                if (data.payload && data.decrypted) {
+                    const dec = data.decrypted;
+                    
+                    document.getElementById('val-pitch').innerText = dec.pitch;
+                    document.getElementById('val-roll').innerText = dec.roll;
+                    document.getElementById('val-yaw').innerText = dec.yaw;
+                    document.getElementById('val-alt').innerText = dec.altitude;
+                    document.getElementById('val-bat').innerText = dec.battery;
+                    document.getElementById('val-gps').innerText = `${dec.lat}, ${dec.lon}`;
+                    document.getElementById('val-payload').innerText = data.payload.substring(0, 64) + "...";
+                    document.getElementById('val-sig').innerText = data.signature;
+                    
+                    document.getElementById('battery-fill').style.width = dec.battery + "%";
+                    
+                    // Rotate model
+                    const model = document.getElementById('satellite-model');
+                    model.style.transform = `rotateX(${dec.pitch}deg) rotateY(${dec.yaw}deg) rotateZ(${dec.roll}deg)`;
+                    
+                    if (Math.random() > 0.9) {
+                        const line = document.createElement('div');
+                        line.className = 'line';
+                        line.innerText = `[${new Date().toLocaleTimeString()}] INCOMING_PACKET: ${data.payload.substring(0,16)}... [OK]`;
+                        const term = document.getElementById('terminal-out');
+                        term.appendChild(line);
+                        term.scrollTop = term.scrollHeight;
+                    }
+                }
+            } catch (e) {
+                console.error("GS_UPLINK_FAILURE", e);
+            }
+        }
+
+        setInterval(updateData, 1000);
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
+
+        document.getElementById('cmd-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const cmd = this.value;
+                const term = document.getElementById('terminal-out');
+                const line = document.createElement('div');
+                line.className = 'line cmd';
+                line.innerText = `> ${cmd}`;
+                term.appendChild(line);
+                this.value = '';
+                
+                fetch('/api/command', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({command: cmd})
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -2,3 +2,5 @@ cryptography
 colorama
 numpy
 rich
+flask
+flask-cors

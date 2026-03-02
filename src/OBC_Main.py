@@ -10,31 +10,22 @@ class OnBoardComputer:
     def __init__(self):
         self.state = "BOOT"
         self.system_integrity = 100
+        self.parser = TelemetryParser()
         print("[OBC] System Initializing...")
         time.sleep(1)
         self.state = "IDLE"
 
-    def read_sensors(self):
+    def process_command(self, secure_packet):
         """
-        Simulates reading data from I2C sensors.
+        Decrypts and executes an incoming command packet.
         """
-        return {
-            "gyro": (0.01, -0.02, 0.05),
-            "temp": 42.0,
-            "power_bus": 12.4
-        }
-
-    def encrypt_and_transmit(self):
-        """
-        Packages sensor data and pretends to send it via LoRa.
-        """
-        raw_data = self.read_sensors()
-        # In a real system, C++ bindings to Crypto_Engine would be called here.
-        packet = TelemetryParser.parse_packet(raw_data) 
-        
-        # Simulate transmission delay
-        time.sleep(0.5)
-        return packet
+        # In this simulation, we assume the command is already hex-encoded payload
+        decrypted = self.parser.crypto.decrypt_command(bytes.fromhex(secure_packet))
+        if decrypted:
+            cmd = decrypted.decode()
+            print(f"[OBC] EXECUTING SECURE COMMAND: {cmd}")
+            return True
+        return False
 
     def run_cycle(self):
         """
@@ -44,4 +35,5 @@ class OnBoardComputer:
             # Simulate a rare anomaly
             return {"type": "ALERT", "msg": "HIGH RADIATION DETECTED"}
         
-        return self.encrypt_and_transmit()
+        # Prepare secure telemetry packet
+        return self.parser.prepare_packet()

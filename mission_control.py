@@ -42,8 +42,12 @@ def generate_telemetry_table(data):
     
     return table
 
+import requests
+import json
+
 def simulation_loop():
     satellite = OnBoardComputer()
+    gs_url = "http://localhost:5000/api/telemetry"
     
     print(f"{Fore.YELLOW}[SYSTEM] Establishing Secure Link...", end="\r")
     time.sleep(2)
@@ -53,13 +57,27 @@ def simulation_loop():
     with Live(generate_telemetry_table({}), refresh_per_second=4) as live:
         try:
             while True:
-                data = satellite.run_cycle()
+                packet = satellite.run_cycle()
                 
-                if "type" in data and data["type"] == "ALERT":
-                    console.print(f"[bold red]!!! ALERT: {data['msg']} !!![/bold red]")
+                if "type" in packet and packet["type"] == "ALERT":
+                    console.print(f"[bold red]!!! ALERT: {packet['msg']} !!![/bold red]")
                     time.sleep(1)
                 else:
-                    live.update(generate_telemetry_table(data))
+                    # In this simulation, we'll decrypt here just for the TUI display
+                    # But send the secure packet to the GS
+                    raw_data = satellite.parser.generate_data()
+                    live.update(generate_telemetry_table(raw_data))
+                    
+                    # Update GS
+                    try:
+                        requests.post(gs_url, json={
+                            "payload": packet["payload"],
+                            "signature": packet["signature"],
+                            "metadata": packet["metadata"],
+                            "decrypted": raw_data
+                        }, timeout=0.1)
+                    except:
+                        pass # Ignore GS failures in TUI mode
                 
                 time.sleep(1)
         except KeyboardInterrupt:
