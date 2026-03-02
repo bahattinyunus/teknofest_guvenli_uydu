@@ -42,6 +42,10 @@ def generate_telemetry_table(data):
     
     return table
 
+# Shared memory for inter-satellite awareness (Simulation of Inter-Satellite Link)
+global_swarm_context = {}
+context_lock = threading.Lock()
+
 def run_satellite_node(sat_id, gs_url):
     """
     Runs a single satellite node in a thread.
@@ -51,11 +55,24 @@ def run_satellite_node(sat_id, gs_url):
     
     try:
         while True:
-            packet = satellite.run_cycle()
+            # Get peer data from global context
+            with context_lock:
+                peers = global_swarm_context.copy()
             
-            # Decrypt locally for TUI simulation (optional)
+            # Run cycle with peer awareness
+            packet = satellite.run_cycle(peer_telemetry=peers)
+            
+            # Decrypt locally for GS simulation
             raw_data = satellite.parser.generate_data()
             
+            # Update global context
+            with context_lock:
+                global_swarm_context[sat_id] = {
+                    "satellite_id": sat_id,
+                    "threat_level": packet.get("threat_level", 0),
+                    "pos": (raw_data['lat'], raw_data['lon'])
+                }
+
             # Post to Global Swarm GS
             try:
                 requests.post(gs_url, json={

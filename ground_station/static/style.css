@@ -116,6 +116,50 @@ main {
     height: calc(100vh - 60px);
 }
 
+/* Mission Log */
+.mission-log-card {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+.mission-log {
+    flex-grow: 1;
+    overflow-y: auto;
+    background: #010409;
+    padding: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    border: 1px solid var(--border-color);
+}
+
+.log-entry {
+    margin-bottom: 0.3rem;
+    border-left: 2px solid var(--accent-color);
+    padding-left: 0.5rem;
+}
+
+.log-entry.warn {
+    border-color: var(--error-color);
+    color: var(--error-color);
+}
+
+.pqc-tag {
+    color: var(--ok-color);
+    font-weight: bold;
+    background: rgba(63, 185, 80, 0.1);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.6rem;
+}
+
+/* Data Card Styles */
+.data-item .value {
+    font-size: 1.2rem;
+    font-family: var(--font-mono);
+    color: #fff;
+}
+
 .dashboard-layout {
     display: grid;
     grid-template-columns: 2fr 1fr;

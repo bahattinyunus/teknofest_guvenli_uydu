@@ -39,10 +39,30 @@ class OnBoardComputer:
             return True
         return False
 
-    def run_cycle(self):
+    def swarm_sync(self, peer_data):
+        """
+        Simulates state synchronization with other satellites in the swarm.
+        Verifies peer health and updates local world-state.
+        """
+        peer_id = peer_data.get("satellite_id")
+        peer_threat = peer_data.get("threat_level", 0)
+        
+        if peer_threat > 50:
+            print(f"[OBC:{self.id}] WARNING: Peer {peer_id} exhibits SUSPICIOUS BEHAVIOR (Threat: {peer_threat})")
+            # In a real swarm, we might isolate the node here.
+            
+        return True
+
+    def run_cycle(self, peer_telemetry=None):
         """
         Single cycle of the main loop.
         """
+        # Sync with peers if available
+        if peer_telemetry:
+            for p_id, p_data in peer_telemetry.items():
+                if p_id != self.id:
+                    self.swarm_sync(p_data)
+
         # Generate telemetry
         raw_telemetry = self.parser.generate_data()
         

@@ -34,9 +34,20 @@
             <!-- Left Panel: Map & Global Stats -->
             <div class="left-panel">
                 <div class="card map-card">
-                    <h3>ORBITAL_LIVE_TRACKING</h3>
+                    <h3>ORBITAL_LIVE_TRACKING // HYBRID_PQC_ACTIVE</h3>
                     <div id="map"></div>
                 </div>
+                <!-- Global Mission Log -->
+                <div class="card mission-log-card">
+                    <h3>GLOBAL_MISSION_LOG</h3>
+                    <div id="mission-log" class="mission-log">
+                        <div class="log-entry">[INIT] Quantum-Secure links established. Swarm sync active.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Node Details -->
+            <div class="right-panel">
                 <div class="card threat-gauge-card">
                     <h3>AI_SENTINEL_THREAT_MONITOR</h3>
                     <div class="threat-container">
@@ -45,18 +56,14 @@
                         </div>
                         <div class="threat-labels">
                             <div id="threat-status">SYSTEM_SECURE</div>
-                            <small id="threat-msg">No anomalies detected in the last 60s.</small>
+                            <small id="threat-msg">No anomalies detected.</small>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Right Panel: Node Details -->
-            <div class="right-panel">
                 <div class="card node-selector-card">
                     <h3>SWARM_NODES</h3>
                     <div id="node-list" class="node-list">
-                        <!-- Dynamic nodes -->
                     </div>
                 </div>
 
@@ -72,7 +79,7 @@
                     <div class="stats-mini">
                         <div class="stat">ALT: <span id="val-alt">0</span>m</div>
                         <div class="stat">BAT: <span id="val-bat">0</span>%</div>
-                        <div class="stat">POS: <span id="val-pos">0,0</span></div>
+                        <div class="stat">MODE: <span class="pqc-tag">ULTRA-PQC</span></div>
                     </div>
                 </div>
 
@@ -91,7 +98,9 @@
     <script>
         let map;
         let markers = {};
+        let trails = {};
         let selectedNode = null;
+
         const satIcon = L.divIcon({
             className: 'sat-marker',
             html: '<div class="icon-core"></div>',
@@ -105,6 +114,15 @@
             }).addTo(map);
         }
 
+        function addLog(msg, type = 'info') {
+            const log = document.getElementById('mission-log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            log.prepend(entry);
+            if (log.children.length > 50) log.removeChild(log.lastChild);
+        }
+
         async function updateSwarm() {
             try {
                 const response = await fetch('/api/telemetry');
@@ -113,16 +131,16 @@
                 document.getElementById('node-count').innerText = nodeIds.length;
 
                 let maxThreat = 0;
-                let threatMsg = "All systems nominal.";
+                let threatMsg = "All swarm nodes nominal.";
 
                 nodeIds.forEach(id => {
                     const data = swarm[id];
                     const dec = data.decrypted;
 
-                    // Update Markers
+                    // Update Markers & Trails
                     if (!markers[id]) {
                         markers[id] = L.marker([dec.lat, dec.lon], { icon: satIcon }).addTo(map);
-                        markers[id].bindPopup(`Satellite: ${id}`);
+                        trails[id] = L.polyline([], { color: '#58a6ff', opacity: 0.5, weight: 2 }).addTo(map);
 
                         // Add to node list
                         const list = document.getElementById('node-list');
@@ -132,13 +150,22 @@
                         btn.onclick = () => selectNode(id);
                         btn.id = `btn-${id}`;
                         list.appendChild(btn);
+                        addLog(`NODE_CONNECTED: ${id} established secure uplink.`);
                     } else {
                         markers[id].setLatLng([dec.lat, dec.lon]);
+                        trails[id].addLatLng([dec.lat, dec.lon]);
+                        // Keep trail short for performance
+                        if (trails[id].getLatLngs().length > 50) {
+                            trails[id].setLatLngs(trails[id].getLatLngs().slice(1));
+                        }
                     }
 
                     if (data.threat_level > maxThreat) {
                         maxThreat = data.threat_level;
-                        if (maxThreat > 50) threatMsg = `Anomaly detected on ${id}`;
+                        if (maxThreat > 50) {
+                            threatMsg = `Security violation detected on ${id}!`;
+                            addLog(`SECURITY_ALERT: Anomaly on ${id}`, 'warn');
+                        }
                     }
 
                     // Update selected node details

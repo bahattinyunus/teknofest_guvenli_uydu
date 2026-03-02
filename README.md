@@ -7,12 +7,12 @@
 ### **[ PROJECT: SECURE_ORBIT_V1 ]**
 
 **Classification:** `TOP SECRET // NOFORN`
-**Security Level:** `LEVEL 5 - QUANTUM ENCRYPTED`
-**Mission Status:** `ACTIVE OPERATIONAL`
+**Security Level:** `LEVEL 6 - HYBRID PQC ENCRYPTED`
+**Mission Status:** `FULL SWARM OPERATIONAL`
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Security: AES-256](https://img.shields.io/badge/Security-AES--256-red)](https://github.com/bahattinyunus)
-[![Version](https://img.shields.io/badge/Version-1.2.0--Ultra--Pro-brightgreen)](https://github.com/bahattinyunus)
+[![Security: AES-256-PQC](https://img.shields.io/badge/Security-AES--256--PQC-red)](https://github.com/bahattinyunus)
+[![Version](https://img.shields.io/badge/Version-1.4.0--Ultra--PQC-brightgreen)](https://github.com/bahattinyunus)
 [![Teknofest](https://img.shields.io/badge/Teknofest-2025-orange)](https://www.teknofest.org)
 [![Platform](https://img.shields.io/badge/Platform-STM32%20%7C%20LoRa-blue)](https://github.com/bahattinyunus)
 [![Handshake](https://img.shields.io/badge/Auth-Handshake--X-cyan)](https://github.com/bahattinyunus)

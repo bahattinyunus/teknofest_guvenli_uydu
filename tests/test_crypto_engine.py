@@ -33,7 +33,8 @@ class TestCryptoEngine(unittest.TestCase):
         """Verify that decryption returns None on corrupted data."""
         encrypted = self.engine.encrypt_telemetry(b"SECRET")
         corrupted = bytearray(encrypted)
-        corrupted[15] ^= 0xFF # Flip a bit in the ciphertext/tag
+        # Corrupt the last byte (guaranteed to be in the ciphertext/tag)
+        corrupted[-1] ^= 0xFF 
         
         decrypted = self.engine.decrypt_command(bytes(corrupted))
         self.assertIsNone(decrypted)
