@@ -5,13 +5,8 @@ from flask_cors import CORS
 app = Flask(__name__, static_folder='static', template_folder='static')
 CORS(app)
 
-# Global store for the latest telemetry
-latest_telemetry = {
-    "payload": "Waiting for data...",
-    "signature": "N/A",
-    "metadata": {},
-    "decrypted": {}
-}
+# Global store for the latest telemetry of all satellites
+swarm_telemetry = {}
 
 @app.route('/')
 def index():
@@ -19,15 +14,19 @@ def index():
 
 @app.route('/api/telemetry', methods=['GET', 'POST'])
 def telemetry():
-    global latest_telemetry
+    global swarm_telemetry
     if request.method == 'POST':
         data = request.json
-        # In a real GS, we would decrypt here. 
-        # For simplicity in this demo, the simulator might send the decrypted version or we mock it.
-        latest_telemetry = data
-        return jsonify({"status": "received"}), 200
+        sat_id = data.get("satellite_id", "UNKNOWN")
+        swarm_telemetry[sat_id] = data
+        return jsonify({"status": "received", "sat_id": sat_id}), 200
     else:
-        return jsonify(latest_telemetry)
+        # Return all telemetry for the map/list
+        return jsonify(swarm_telemetry)
+
+@app.route('/api/telemetry/<sat_id>', methods=['GET'])
+def telemetry_single(sat_id):
+    return jsonify(swarm_telemetry.get(sat_id, {}))
 
 @app.route('/api/command', methods=['POST'])
 def send_command():

@@ -1,17 +1,19 @@
 import time
 import random
-from .Telemetry_Parser import TelemetryParser
+from .Sentinel_AI import SentinelAI
 
 class OnBoardComputer:
     """
     The main brain of the satellite. Manages state, sensors, and secure comms.
     """
     
-    def __init__(self):
+    def __init__(self, satellite_id="SAT_ALPHA"):
+        self.id = satellite_id
         self.state = "BOOT"
         self.system_integrity = 100
         self.parser = TelemetryParser()
-        print("[OBC] System Initializing...")
+        self.sentinel = SentinelAI()
+        print(f"[OBC:{self.id}] System Initializing...")
         time.sleep(1)
         self.state = "IDLE"
 
@@ -19,11 +21,21 @@ class OnBoardComputer:
         """
         Decrypts and executes an incoming command packet.
         """
-        # In this simulation, we assume the command is already hex-encoded payload
+        # Sentinel Check 1: Rate & Content
+        # In a real system, we'd check BEFORE decrypting if possible (HMAC fail), 
+        # but here we decrypt first to check content.
         decrypted = self.parser.crypto.decrypt_command(bytes.fromhex(secure_packet))
+        
         if decrypted:
             cmd = decrypted.decode()
-            print(f"[OBC] EXECUTING SECURE COMMAND: {cmd}")
+            threat_inc = self.sentinel.analyze_command(cmd)
+            self.sentinel.update_threat_level(threat_inc)
+            
+            if self.sentinel.threat_score > 80:
+                print(f"[OBC:{self.id}] SECURITY_LOCKOUT: COMMAND IGNORED DUE TO HIGH THREAT.")
+                return False
+                
+            print(f"[OBC:{self.id}] EXECUTING SECURE COMMAND: {cmd}")
             return True
         return False
 
@@ -31,9 +43,21 @@ class OnBoardComputer:
         """
         Single cycle of the main loop.
         """
-        if random.random() < 0.05:
-            # Simulate a rare anomaly
-            return {"type": "ALERT", "msg": "HIGH RADIATION DETECTED"}
+        # Generate telemetry
+        raw_telemetry = self.parser.generate_data()
+        
+        # Sentinel Check 2: Physical Anomalies
+        threat_inc = self.sentinel.analyze_telemetry(raw_telemetry)
+        threat_level = self.sentinel.update_threat_level(threat_inc)
         
         # Prepare secure telemetry packet
-        return self.parser.prepare_packet()
+        packet = self.parser.prepare_packet()
+        packet["satellite_id"] = self.id
+        packet["threat_level"] = threat_level
+        packet["threat_status"] = self.sentinel.get_status()
+        
+        if random.random() < 0.05:
+            # Simulate a rare anomaly
+            return {"type": "ALERT", "msg": "HIGH RADIATION DETECTED", "satellite_id": self.id}
+        
+        return packet

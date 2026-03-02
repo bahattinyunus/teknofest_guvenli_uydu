@@ -42,46 +42,60 @@ def generate_telemetry_table(data):
     
     return table
 
-import requests
-import json
+def run_satellite_node(sat_id, gs_url):
+    """
+    Runs a single satellite node in a thread.
+    """
+    satellite = OnBoardComputer(satellite_id=sat_id)
+    print(f"{Fore.CYAN}[SYSTEM] {sat_id} Link establishing...")
+    
+    try:
+        while True:
+            packet = satellite.run_cycle()
+            
+            # Decrypt locally for TUI simulation (optional)
+            raw_data = satellite.parser.generate_data()
+            
+            # Post to Global Swarm GS
+            try:
+                requests.post(gs_url, json={
+                    "satellite_id": sat_id,
+                    "payload": packet.get("payload", ""),
+                    "signature": packet.get("signature", ""),
+                    "metadata": packet.get("metadata", {}),
+                    "threat_level": packet.get("threat_level", 0),
+                    "threat_status": packet.get("threat_status", "SECURE"),
+                    "decrypted": raw_data
+                }, timeout=0.2)
+            except:
+                pass
+            
+            time.sleep(1 + random.uniform(0, 0.5))
+    except Exception as e:
+        print(f"{Fore.RED}[{sat_id}] CRITICAL_FAILURE: {e}")
 
 def simulation_loop():
-    satellite = OnBoardComputer()
     gs_url = "http://localhost:5000/api/telemetry"
     
-    print(f"{Fore.YELLOW}[SYSTEM] Establishing Secure Link...", end="\r")
-    time.sleep(2)
-    print(f"{Fore.GREEN}[SYSTEM] LINK ESTABLISHED. HANDSHAKE VERIFIED.")
-    time.sleep(1)
+    sat_ids = ["SAT-ALPHA", "SAT-BRAVO", "SAT-CHARLIE"]
+    threads = []
+    
+    print(f"{Fore.GREEN}[SWARM] INITIALIZING {len(sat_ids)} SECURE NODES...")
+    
+    for s_id in sat_ids:
+        t = threading.Thread(target=run_satellite_node, args=(s_id, gs_url), daemon=True)
+        t.start()
+        threads.append(t)
+        time.sleep(0.5)
 
-    with Live(generate_telemetry_table({}), refresh_per_second=4) as live:
-        try:
-            while True:
-                packet = satellite.run_cycle()
-                
-                if "type" in packet and packet["type"] == "ALERT":
-                    console.print(f"[bold red]!!! ALERT: {packet['msg']} !!![/bold red]")
-                    time.sleep(1)
-                else:
-                    # In this simulation, we'll decrypt here just for the TUI display
-                    # But send the secure packet to the GS
-                    raw_data = satellite.parser.generate_data()
-                    live.update(generate_telemetry_table(raw_data))
-                    
-                    # Update GS
-                    try:
-                        requests.post(gs_url, json={
-                            "payload": packet["payload"],
-                            "signature": packet["signature"],
-                            "metadata": packet["metadata"],
-                            "decrypted": raw_data
-                        }, timeout=0.1)
-                    except:
-                        pass # Ignore GS failures in TUI mode
-                
-                time.sleep(1)
-        except KeyboardInterrupt:
-            print(f"\n{Fore.RED}[SYSTEM] LINK TERMINATED BY USER.")
+    print(f"{Fore.YELLOW}[SWARM] ALL NODES OPERATIONAL. VIEWING LIVE AT GS: {gs_url}")
+    
+    try:
+        # Just keep main thread alive or show global summary
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print(f"\n{Fore.RED}[SYSTEM] SWARM DEACTIVATED BY COMMANDER.")
 
 if __name__ == "__main__":
     print_banner()
